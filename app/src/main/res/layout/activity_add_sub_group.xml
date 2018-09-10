@@ -7,30 +7,39 @@
     tools:context=".AddSubGroup"
     android:orientation="vertical">
 
+    <EditText
+        android:id="@+id/ASGgroupName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Organization Name"
+        android:inputType="textPersonName" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/searchGroupBox"
-            android:layout_width="wrap_content"
+            android:id="@+id/ASGsearchAdmin"
+            android:layout_width="306dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Search"
+            android:ems="10"
+            android:hint="Search Admin"
             android:inputType="textPersonName" />
 
         <ImageButton
-            android:id="@+id/searchGroupBtn"
+            android:id="@+id/ASGsearchButton"
             android:layout_width="wrap_content"
-            android:layout_height="57dp"
-            app:srcCompat="@android:drawable/ic_search_category_default" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_search" />
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/searchGroupList"
-        android:layout_width="472dp"
-        android:layout_height="498dp"
-        android:layout_marginTop="16dp" />
+        android:id="@+id/ASGmembers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

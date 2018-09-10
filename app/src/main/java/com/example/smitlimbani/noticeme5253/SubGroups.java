@@ -82,6 +82,7 @@ public class SubGroups extends AppCompatActivity {
 
     public void addSubGroup(View view)
     {
-        startActivity(new Intent(SubGroups.this, AddSubGroup.class).putExtra("gid", groupId));
+        startActivityForResult(new Intent(SubGroups.this, AddSubGroup.class).putExtra("group_id", groupId),1);
+        startActivity(new Intent(SubGroups.this, AddSubGroup.class).putExtra("group_id", groupId));
     }
 }
