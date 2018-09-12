@@ -104,6 +104,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".JoinGroup" />
+        <activity android:name=".SelectGroups"></activity>
     </application>
 
 </manifest>
