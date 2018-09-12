@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -49,7 +50,6 @@ public class AddMember extends AppCompatActivity {
         mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("chaling", "cjsaf");
                 searchQuery = mSearchBox.getText().toString();
                 userSearch(searchQuery);
             }
@@ -83,6 +83,7 @@ public class AddMember extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         databaseReference.child("is_from").child(getIntent().getExtras().getString("gid")).child(getRef(holder.getAdapterPosition()).getKey()).setValue(true);
+
                         Log.e("enter", "hua");
                         Toast.makeText(getApplicationContext(), model.getDisplayName() + " added to the group", Toast.LENGTH_LONG).show();
                     }

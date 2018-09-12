@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "681027846180-suluip789je7b9a0afdv3bmlf2s0nnjc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smitlimbani.noticeme5253",
+            "certificate_hash": "40190cb61a8b0bdbdc69b12016cc4daa0cdc41d4"
+          }
+        },
+        {
           "client_id": "681027846180-3ah8humo4sn9fn16cc2ga390qqnqg4in.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -38,7 +46,12 @@
         },
         "appinvite_service": {
           "status": 2,
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681027846180-3ah8humo4sn9fn16cc2ga390qqnqg4in.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

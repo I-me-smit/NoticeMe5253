@@ -82,4 +82,10 @@
     <string name="email_id">Email Id</string>
     <string name="contact_no">Contact No</string>
     <string name="contact_android_string_no">contact @android:string/no</string>
+    <string name="search">Search</string>
+    <string name="todo">TODO</string>
+    <string name="org_type">orgType</string>
+    <string name="display_org_name">Organization name</string>
+
+
 </resources>
