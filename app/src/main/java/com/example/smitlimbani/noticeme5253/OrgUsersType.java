@@ -39,6 +39,7 @@ public class OrgUsersType extends AppCompatActivity {
         setContentView(R.layout.activity_org_users_type);
 
         Log.e("7","jsdfkd");
+
         Spinner sp = (Spinner) findViewById(R.id.spinner2);
 //        db = FirebaseDatabase.getInstance().getReference().child("user_details").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("org_id");
 //
