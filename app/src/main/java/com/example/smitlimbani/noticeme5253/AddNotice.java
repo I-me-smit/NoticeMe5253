@@ -50,7 +50,7 @@ public class AddNotice extends AppCompatActivity {
 
     public void captureImage(View view)
     {
-        Intent captureImg = new Intent(MediaStore.ACTION_IMAGE_CAPTURE;
+        Intent captureImg = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(captureImg, CAMERA_CAPTURE_CODE);
     }
 
@@ -59,9 +59,9 @@ public class AddNotice extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode== CAMERA_CAPTURE_CODE && resultCode == RESULT_OK)
         {
-            Uri uri= data.getData();
-            StorageReference filepath = storageReference.child("notices").child();
-            filepath.putFile(uri);
+//            Uri uri= data.getData();
+//            StorageReference filepath = storageReference.child("notices").child();
+//            filepath.putFile(uri);
         }
     }
 }
