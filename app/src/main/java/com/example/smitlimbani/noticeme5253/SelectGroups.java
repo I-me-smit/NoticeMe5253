@@ -1,5 +1,6 @@
 package com.example.smitlimbani.noticeme5253;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,133 +30,76 @@ public class SelectGroups extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    private RecyclerView mMemberList;
-    private FirebaseRecyclerAdapter<UserDetails, MembersViewHolder> firebaseRecyclerAdapter;
-    private EditText mGroupName;
-    private EditText mSearchAdmin;
-    private ImageButton mSearchBtn;
+    private FirebaseRecyclerAdapter<GroupDetails, GroupViewHolder> firebaseRecyclerAdapter;
+    private RecyclerView mGroupsList;
+    private DatabaseReference user_groupsRef = databaseReference.child("user_groups");
+    private DatabaseReference can_post_toRef = databaseReference.child("can_post_to");
+
+    Query keyQuery;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_groups);
-
-        mMemberList = (RecyclerView) findViewById(R.id.ASGmembers);
-        mGroupName = (EditText) findViewById(R.id.ASGgroupName);
-        mSearchAdmin = (EditText) findViewById(R.id.ASGsearchAdmin);
-        mSearchBtn = (ImageButton) findViewById(R.id.ASGsearchButton);
-
-        mMemberList.setHasFixedSize(true);
-
-
-        mSearchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchForAdmin(mSearchAdmin.getText().toString());
-            }
-        });
-
-
+        mGroupsList = (RecyclerView)findViewById(R.id.SGgroupsList);
+        mGroupsList.setHasFixedSize(true);
+        Query query = user_groupsRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+        refreshQuery(query);
     }
 
-    private void searchForAdmin(String searchString) {
+    public void refreshQuery(Query query) {
+        this.keyQuery = query;
+        attachRecyclerView();
+    }
 
-        Log.e("ye", "hua");
+    private void attachRecyclerView() {
 
-        Query query = databaseReference.child("user_details").orderByChild("displayName").startAt(searchString).endAt(searchString + "\uf8ff");
+//        Query keyQuery = databaseReference.child("can_post_to").child(groupId);
 
-        FirebaseRecyclerOptions<UserDetails> firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<UserDetails>()
-                .setQuery(query, UserDetails.class)
+        FirebaseRecyclerOptions<GroupDetails> options = new FirebaseRecyclerOptions.Builder<GroupDetails>()
+                .setIndexedQuery(keyQuery, firebaseDatabase.getReference().child("groups"),GroupDetails.class)
                 .build();
 
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<UserDetails, MembersViewHolder>(firebaseRecyclerOptions) {
-            @Override
-            protected void onBindViewHolder(@NonNull final MembersViewHolder holder, int position, @NonNull final UserDetails model) {
-                holder.mDisplayName.setText(model.getDisplayName());
-                holder.mContactNo.setText(model.getContactNo());
-                holder.mEmailId.setText(model.getEmailId());
-
-                holder.mMemberCard.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        setGroupDetails(getRef(holder.getAdapterPosition()).getKey());
-                        Log.e("enter", "hua");
-                        Toast.makeText(getApplicationContext(), model.getDisplayName() + " added to the group", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-                });
-            }
-
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<GroupDetails, GroupViewHolder>(options) {
             @NonNull
             @Override
-            public MembersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.member_card, parent, false);
-                return new MembersViewHolder(view);
+            public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.admin_group, parent, false);
+                return new GroupViewHolder(view);
             }
 
-        };
-
-        mMemberList.setLayoutManager(new LinearLayoutManager(this));
-        firebaseRecyclerAdapter.startListening();
-        mMemberList.setAdapter(firebaseRecyclerAdapter);
-    }
-
-    public void setGroupDetails(String adminUserId) {
-        final GroupDetails groupDetails = new GroupDetails();
-
-        groupDetails.setGroup_admin(adminUserId);
-        groupDetails.setGroup_name(mGroupName.getText().toString());
-        DatabaseReference orgIdRef = databaseReference.child("user_details").child(adminUserId).child("org_id");
-        orgIdRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            String orgId;
-
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            protected void onBindViewHolder(@NonNull final GroupViewHolder holder, int position, @NonNull GroupDetails model) {
 
-                orgId = dataSnapshot.getValue().toString();
-
-                DatabaseReference orgNameRef = databaseReference.child("organizations").child(orgId).child("org_name");
-
-                orgNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    public String orgName;
-
+                holder.mGroupName.setText(model.getGroup_name().toString());
+                holder.mOrgName.setText(model.getOrg_name().toString());
+                final String currentGroupId = getRef(holder.getAdapterPosition()).getKey().toString();
+                holder.mGroupsBtn.setText("Send here");
+                holder.mMembersBtn.setText("View Subgroups");
+                holder.mGroupsBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        Log.e("value", orgId);
-
-                        orgName = dataSnapshot.getValue().toString();
-
-                        groupDetails.setOrg_id(orgId);
-                        groupDetails.setOrg_name(orgName);
-
-                        Log.e("id", groupDetails.getOrg_id());
-                        Log.e("name", groupDetails.getOrg_name());
-                        DatabaseReference groupRef = databaseReference.child("groups");
-                        groupRef.push().setValue(groupDetails, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                String newGroupKey = databaseReference.getKey();
-                                firebaseDatabase.getReference().child("can_post_to").child(getIntent().getExtras().getString("group_id").toString()).child(newGroupKey).setValue(true);
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    public void onClick(View view) {
+                        holder.mGroupsBtn.setEnabled(false);
                     }
                 });
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                holder.mMembersBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Query newQuery = can_post_toRef.child(currentGroupId);
+                        refreshQuery(newQuery);
+                    }
+                });
+
 
             }
-        });
+        };
+
+        mGroupsList.setLayoutManager(new LinearLayoutManager(this));
+        firebaseRecyclerAdapter.startListening();
+        mGroupsList.setAdapter(firebaseRecyclerAdapter);
+
     }
+
 }

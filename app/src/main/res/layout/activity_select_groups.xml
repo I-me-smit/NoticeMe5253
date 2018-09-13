@@ -7,39 +7,8 @@
     tools:context=".SelectGroups"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/ASGgroupName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Organization Name"
-        android:inputType="textPersonName" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/ASGsearchAdmin"
-            android:layout_width="306dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Search Admin"
-            android:inputType="textPersonName" />
-
-        <ImageButton
-            android:id="@+id/ASGsearchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_menu_search" />
-
-    </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/ASGmembers"
+        android:id="@+id/SGgroupsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

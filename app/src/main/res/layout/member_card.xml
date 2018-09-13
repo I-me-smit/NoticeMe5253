@@ -42,4 +42,5 @@
             android:text="contact no"/>
 
     </RelativeLayout>
+
 </android.support.v7.widget.CardView>

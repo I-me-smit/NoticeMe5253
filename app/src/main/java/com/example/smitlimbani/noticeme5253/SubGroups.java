@@ -36,7 +36,7 @@ public class SubGroups extends AppCompatActivity {
         mSubGroupList.setHasFixedSize(true);
         groupId = getIntent().getExtras().getString("group_id");
         String groupId = getIntent().getExtras().getString("group_id");
-            Query keyQuery = databaseReference.child("can_post_to").child(groupId);
+        Query keyQuery = databaseReference.child("can_post_to").child(groupId);
 
         FirebaseRecyclerOptions<GroupDetails> options = new FirebaseRecyclerOptions.Builder<GroupDetails>()
                 .setIndexedQuery(keyQuery, firebaseDatabase.getReference().child("groups"),GroupDetails.class)

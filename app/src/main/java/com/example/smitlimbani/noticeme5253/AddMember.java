@@ -82,8 +82,10 @@ public class AddMember extends AppCompatActivity {
                 holder.mMemberCard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        databaseReference.child("is_from").child(getIntent().getExtras().getString("gid")).child(getRef(holder.getAdapterPosition()).getKey()).setValue(true);
-
+                        String gid = getIntent().getExtras().getString("gid");
+                        String uid = getRef(holder.getAdapterPosition()).getKey();
+                        databaseReference.child("is_from").child(gid).child(uid).setValue(true);
+                        databaseReference.child("user_groups").child(uid).child(gid).setValue(true);
                         Log.e("enter", "hua");
                         Toast.makeText(getApplicationContext(), model.getDisplayName() + " added to the group", Toast.LENGTH_LONG).show();
                     }
