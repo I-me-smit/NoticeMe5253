@@ -95,9 +95,7 @@ public class JoinOrg extends AppCompatActivity {
             }
         };
 
-
-
-            mOrgList.setLayoutManager(new LinearLayoutManager(this));
+        mOrgList.setLayoutManager(new LinearLayoutManager(this));
         firebaseRecyclerAdapter.startListening();
         mOrgList.setAdapter(firebaseRecyclerAdapter);
 
