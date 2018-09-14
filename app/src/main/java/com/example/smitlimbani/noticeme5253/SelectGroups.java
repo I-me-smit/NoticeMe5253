@@ -80,6 +80,10 @@ public class SelectGroups extends AppCompatActivity {
                 holder.mGroupsBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        String noticeId=getIntent().getExtras().getString("noticeId");
+                        databaseReference.child("gets_posted").child(noticeId).child(currentGroupId).setValue(true);
+
                         holder.mGroupsBtn.setEnabled(false);
                     }
                 });
@@ -91,7 +95,6 @@ public class SelectGroups extends AppCompatActivity {
                         refreshQuery(newQuery);
                     }
                 });
-
 
             }
         };
