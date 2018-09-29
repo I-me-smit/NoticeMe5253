@@ -66,6 +66,8 @@ public class ManageGroups extends AppCompatActivity {
                 holder.mOrgName.setText(model.getOrg_name().toString());
                 final String currentGroupId = getRef(holder.getAdapterPosition()).getKey().toString();
 
+                holder.mJoinRequest.setVisibility(View.VISIBLE);
+
                 holder.mGroupsBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -77,6 +79,13 @@ public class ManageGroups extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         startActivity(new Intent(ManageGroups.this, GroupMembers.class).putExtra("group_id", currentGroupId));
+                    }
+                });
+
+                holder.mJoinRequest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(ManageGroups.this, JoinRequests.class).putExtra("group_id", currentGroupId));
                     }
                 });
             }

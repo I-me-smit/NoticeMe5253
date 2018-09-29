@@ -5,11 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -25,6 +27,8 @@ public class JoinGroup extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    private DatabaseReference newdbRef = databaseReference;
+
     private RecyclerView mGrpList;
     private FirebaseRecyclerAdapter<GroupDetails, GroupViewHolder> firebaseRecyclerAdapter;
     private ImageButton mSearch;
@@ -66,15 +70,37 @@ public class JoinGroup extends AppCompatActivity {
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<GroupDetails, GroupViewHolder>(options) {
             @Override
             @NonNull
-            protected void onBindViewHolder(@NonNull GroupViewHolder holder, int position, @NonNull GroupDetails model) {
+            protected void onBindViewHolder(@NonNull final GroupViewHolder holder, final int position, @NonNull GroupDetails model) {
 
                 holder.mGroupName.setText(model.getGroup_name().toString());
                 holder.mOrgName.setText(model.getOrg_name().toString());
+                holder.mGroupsBtn.setText("Join");
                 holder.mMembersBtn.setVisibility(View.GONE);
                 holder.mGroupsBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        databaseReference.child("groups").child(getRef(holder.getAdapterPosition()).getKey().toString()).child("group_admin").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                                String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+
+                                if(dataSnapshot.getValue().toString().equals(currentUser))
+                                {
+                                    Toast.makeText(JoinGroup.this, "You are already in the group", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    newdbRef.child("request_to_join").child(dataSnapshot.getValue().toString()).child(getRef(holder.getAdapterPosition()).getKey().toString()).child(currentUser).setValue(true);
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
 

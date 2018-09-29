@@ -32,9 +32,7 @@ public class OrgUsersTypeHelper {
         org_users_type.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.e("5","jsdfkd");
                 fetchData(dataSnapshot,users);
-                Log.e("6","jsdfkd");
             }
 
             @Override

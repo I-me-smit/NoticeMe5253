@@ -32,7 +32,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchGrpList"
-        android:layout_width="472dp"
-        android:layout_height="498dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="16dp" />
 </LinearLayout>
