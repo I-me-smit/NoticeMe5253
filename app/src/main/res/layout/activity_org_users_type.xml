@@ -5,26 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OrgUsersType">
+    tools:context=".JoinOrg">
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/orgUserType_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <Spinner
-            android:id="@+id/mcSpinner"
-            android:layout_width="297dp"
-            android:layout_height="match_parent"
-            android:visibility="visible" />
-
-        <Button
-            android:id="@+id/btnSubmit"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/submit" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>
