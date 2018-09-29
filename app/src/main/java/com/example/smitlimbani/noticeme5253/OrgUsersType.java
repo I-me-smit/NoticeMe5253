@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,33 +22,56 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrgUsersType extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class OrgUsersType extends AppCompatActivity  {
 
-    DatabaseReference db;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private DatabaseReference ref ;
     OrgUsersTypeHelper helper;
     private String addquery;
+    ListView orgUserType_list;
+    ArrayList<String> list=new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_org_users_type);
+        Bundle bundle = getIntent().getExtras();
+        String orgid = getIntent().getExtras().getString("org_id").toString();
 
-        Log.e("7","jsdfkd");
+        Log.e("7", "jsdfkd");
 
-        Spinner sp = (Spinner) findViewById(R.id.spinner2);
-//        db = FirebaseDatabase.getInstance().getReference().child("user_details").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("org_id");
+        orgUserType_list = (ListView) findViewById(R.id.orgUserType_list);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,list );
+        orgUserType_list.setAdapter(adapter);
+        orgUserType_list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        //Query query = ref.child("org_users_type");
+        ref = databaseReference.child("org_users_type").child(orgid);
 //
-//        db.addValueEventListener(new ValueEventListener() {
+
+//        ref.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String org_id = dataSnapshot.getValue().toString();
+//                for(DataSnapshot ds : dataSnapshot.getChildren())
+//                {
+//
+//                    Log.e("11", "bbbbbjsdfkd");
+//
+//
+//                list.add(dataSnapshot.getValue().toString());
+//                adapter.notifyDataSetChanged();
+//
+//
+//                }
 //            }
 //
 //            @Override
@@ -56,39 +80,90 @@ public class OrgUsersType extends AppCompatActivity implements AdapterView.OnIte
 //            }
 //        });
 
-         helper = new OrgUsersTypeHelper(getIntent().getExtras().getString("org_id").toString());
+        Log.e("9", "aaaaa jsdfkdbjhscjhbcj");
+        orgUserType_list.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent,
+                                            View view, int position, long id) {
+                        String userType = orgUserType_list.getItemAtPosition(position).toString();
+                        databaseReference.child("user_details").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("user_type").setValue(userType);
 
-       ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, helper.retrieve());
-        //ArrayAdapter<String> arrayAdapter = ArrayAdapter.createFromResource(this,helper.retrieve(),android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        Log.e("912", "selected");
 
-        sp.setAdapter(arrayAdapter);
-        sp.setOnItemSelectedListener(this);
-        Log.e("8","jsdfkd");
-        Button btn = (Button) findViewById(R.id.btnSubmit);
-
-        btn.setOnClickListener(new View.OnClickListener() {
+                    }
+                });
+        ref.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onClick(View view) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                adapter.add(
+//                        (String) dataSnapshot.getValue());
 
-
+                list.add(dataSnapshot.getValue(String.class));
+                adapter.notifyDataSetChanged();
+                Log.e("8", "jsdfkdbjhscjhbcj");
 
             }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//                list.remove(dataSnapshot.getValue(String.class));
+//                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+//            ref.addChildEventListener(childListener);
+
+
         });
+
+
     }
+//        Spinner sp = (Spinner) findViewById(R.id.spinner2);
+//        db = FirebaseDatabase.getInstance().getReference().child("user_details").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("org_id");
+//
+//        db.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String org_id = dataSnapshot.  Value().toString();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+//         helper = new OrgUsersTypeHelper(getIntent().getExtras().getString("org_id").toString());
+//
+//
+//        Log.e("8","jsdfkd");
+//        Button btn = (Button) findViewById(R.id.btnSubmit);
+//
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//
+//            }
+//        });
 
 
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String item = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // TODO Auto-generated method stub
-    }
+
 }
 

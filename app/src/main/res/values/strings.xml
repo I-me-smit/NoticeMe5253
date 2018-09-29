@@ -86,6 +86,7 @@
     <string name="todo">TODO</string>
     <string name="org_type">orgType</string>
     <string name="display_org_name">Organization name</string>
+    <string name="spinner_title" />
 
 
 </resources>
