@@ -84,6 +84,8 @@ public class SelectGroups extends AppCompatActivity {
                         String noticeId=getIntent().getExtras().getString("noticeId");
                         databaseReference.child("gets_posted").child(noticeId).child(currentGroupId).setValue(true);
 
+                        databaseReference.child("group_sees").child(currentGroupId).child(noticeId).setValue(true);
+
                         holder.mGroupsBtn.setEnabled(false);
                     }
                 });

@@ -39,7 +39,6 @@ public class AddNotice extends AppCompatActivity {
     public String newNoticeKey;
     public Uri mImageUri;
     private Button mSaveDetails;
-
     public NoticeDetails noticeDetails = new NoticeDetails();
 
     public void setNewNoticeKey(String newNoticeKey) {
@@ -58,22 +57,27 @@ public class AddNotice extends AppCompatActivity {
         mSelectGroupBtn = (Button) findViewById(R.id.ANselectGroupsBtn);
 
 
-        noticeDetails.setNotice_title(mNoticeTitle.getText().toString());
-        noticeDetails.setNotice_expiry(mExpiryDays.getText().toString());
-        noticeDetails.setNotice_content(mNoticeContent.getText().toString());
-        noticeDetails.setNotice_sender(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+
 
 
 
         mSaveDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                noticeDetails.setNotice_title(mNoticeTitle.getText().toString());
+                noticeDetails.setNotice_expiry(mExpiryDays.getText().toString());
+                noticeDetails.setNotice_content(mNoticeContent.getText().toString());
+                noticeDetails.setNotice_sender(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
                 databaseReference.child("notice").push().setValue(noticeDetails, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                         String noticeKey = databaseReference.getKey();
                         Log.e("andar valu", noticeKey);
                         setNewNoticeKey(noticeKey);
+                        mSaveDetails.setEnabled(false);
                     }
                 });
             }

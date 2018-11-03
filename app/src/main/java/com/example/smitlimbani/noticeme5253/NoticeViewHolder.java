@@ -7,18 +7,20 @@ import android.widget.TextView;
 
 public class NoticeViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView mNoticeTitle;
-    private TextView mNoticeContent;
-    private TextView mExpiryTime;
-    private TextView mNoticeGroup;
-    private ImageView mNoticeImage;
+    public View mView;
+    public TextView mNoticeTitle;
+    public TextView mNoticeContent;
+    public TextView mExpiryTime;
+    public TextView mNoticeGroup;
+    public ImageView mNoticeImage;
 
     public NoticeViewHolder(View itemView) {
         super(itemView);
-        mNoticeTitle = (TextView) itemView.findViewById(R.id.MAnoticeTitle);
-        mNoticeContent = (TextView) itemView.findViewById(R.id.MAgroupName);
-        mExpiryTime = (TextView) itemView.findViewById(R.id.MAexpiryTime);
-        mNoticeGroup = (TextView) itemView.findViewById(R.id.MAnoticeContent);
-        mNoticeImage = (ImageView) itemView.findViewById(R.id.MAnoticeImage);
+        mView = itemView;
+        mNoticeTitle = (TextView) mView.findViewById(R.id.MAnoticeTitle);
+        mNoticeContent = (TextView) mView.findViewById(R.id.MAnoticeContent);
+        mExpiryTime = (TextView) mView.findViewById(R.id.MAexpiryTime);
+//        mNoticeGroup = (TextView) mView.findViewById(R.id.MAgroupName);
+        mNoticeImage = (ImageView) mView.findViewById(R.id.MAnoticeImage);
     }
 }

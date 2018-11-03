@@ -48,7 +48,7 @@ public class OrgUsersType extends AppCompatActivity  {
         Bundle bundle = getIntent().getExtras();
         String orgid = getIntent().getExtras().getString("org_id").toString();
 
-        Log.e("7", "jsdfkd");
+//        Log.e("7", "jsdfkd");
 
         orgUserType_list = (ListView) findViewById(R.id.orgUserType_list);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,list );
@@ -80,7 +80,7 @@ public class OrgUsersType extends AppCompatActivity  {
 //            }
 //        });
 
-        Log.e("9", "aaaaa jsdfkdbjhscjhbcj");
+//        Log.e("9", "aaaaa jsdfkdbjhscjhbcj");
         orgUserType_list.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent,
@@ -88,7 +88,7 @@ public class OrgUsersType extends AppCompatActivity  {
                         String userType = orgUserType_list.getItemAtPosition(position).toString();
                         databaseReference.child("user_details").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("user_type").setValue(userType);
 
-                        Log.e("912", "selected");
+//                        Log.e("912", "selected");
 
                     }
                 });
@@ -98,9 +98,8 @@ public class OrgUsersType extends AppCompatActivity  {
 //                adapter.add(
 //                        (String) dataSnapshot.getValue());
 
-                list.add(dataSnapshot.getValue(String.class));
+                list.add(dataSnapshot.getKey().toString());
                 adapter.notifyDataSetChanged();
-                Log.e("8", "jsdfkdbjhscjhbcj");
 
             }
 

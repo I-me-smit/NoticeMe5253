@@ -61,7 +61,7 @@ public class SubGroups extends AppCompatActivity {
                 holder.mGroupsBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(SubGroups.this, AddMember.class).putExtra("group_id", currentGroupId));
+                        startActivity(new Intent(SubGroups.this, AddMember.class).putExtra("gid", currentGroupId));
                     }
                 });
             }

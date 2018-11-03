@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -81,6 +82,7 @@ public class AddSubGroup extends AppCompatActivity {
                     public void onClick(View view) {
                         setGroupDetails(getRef(holder.getAdapterPosition()).getKey());
                         Log.e("enter", "hua");
+
                         Toast.makeText(getApplicationContext(), model.getDisplayName() + " added to the group", Toast.LENGTH_LONG).show();
                         finish();
                     }
@@ -107,6 +109,8 @@ public class AddSubGroup extends AppCompatActivity {
 
         groupDetails.setGroup_admin(adminUserId);
         groupDetails.setGroup_name(mGroupName.getText().toString());
+
+
         DatabaseReference orgIdRef = databaseReference.child("user_details").child(adminUserId).child("org_id");
         orgIdRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -133,12 +137,18 @@ public class AddSubGroup extends AppCompatActivity {
 
                         Log.e("id",groupDetails.getOrg_id() );
                         Log.e("name",groupDetails.getOrg_name() );
+
+
+
                         DatabaseReference groupRef = databaseReference.child("groups");
                         groupRef.push().setValue(groupDetails, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                 String newGroupKey = databaseReference.getKey();
+                                String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
                                 firebaseDatabase.getReference().child("can_post_to").child(getIntent().getExtras().getString("group_id").toString()).child(newGroupKey).setValue(true);
+                                databaseReference.child("is_from").child(newGroupKey).child(currentUser).setValue(true);
+                                databaseReference.child("user_groups").child(currentUser).child(newGroupKey).setValue(true);
                             }
                         });
 

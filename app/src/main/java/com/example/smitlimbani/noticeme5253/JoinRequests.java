@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -64,20 +65,24 @@ public class JoinRequests extends AppCompatActivity {
                         String uid = getRef(holder.getAdapterPosition()).getKey().toString();
                         databaseReference.child("is_from").child(groupId).child(uid).setValue(true);
                         databaseReference.child("user_groups").child(uid).child(groupId).setValue(true);
-//                        databaseReference.child("request_to_join").child(currentUser).child(groupId).orderByChild(uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                for (DataSnapshot uid : dataSnapshot.getChildren())
-//                                {
-//                                    uid.getRef().removeValue();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                            }
-//                        });
+
+                        Query query = databaseReference.child("request_to_join").child(currentUser).child(groupId).orderByKey().equalTo(uid);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot nuid : dataSnapshot.getChildren())
+                                {
+                                    nuid.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Toast.makeText(JoinRequests.this, uid+" added to "+groupId, Toast.LENGTH_LONG);
                     }
                 });
             }
